@@ -1,0 +1,42 @@
+// The following is the code that can be implemented in main using DEBUG (will NOT work in a
+//normal run but takes about 30 secs using debug)
+// It's used for the complexity study in part 2 and gives what is contained in the data.txt file
+// RESULT CAN BE FOUND IN THE DATA.TXT FILE
+/*
+    FILE *log_file = fopen("../data.txt", "w");
+    char format[] = "%d\t%s\t%s\n";
+    int level;
+    char *time_lvl0;
+    char *time_all_levels;
+
+    srand(time(NULL));
+
+    for (int j = 1; j <= 64; j *= 2) {
+        int maxval = 1000 * j;
+        t_list *list = createListToSearch(maxval);
+
+        // Classic search
+        startTimer();
+        for (int i = 0; i <= 10000; i++) {
+            searchValue(list, rand() % maxval + 1);
+        }
+        stopTimer();
+        displayTime();
+        time_lvl0 = getTimeAsString();
+
+        // Search by level
+        startTimer();
+        for (int i = 0; i <= 10000; i++) {
+            int tosearch = rand() % 1001;
+            searchLevelValue(list, tosearch);
+        }
+        stopTimer();
+        displayTime();
+        time_all_levels = getTimeAsString();
+
+        // Log the results
+        fprintf(log_file, format, maxval, time_lvl0, time_all_levels);
+    }
+
+    fclose(log_file);
+    */
