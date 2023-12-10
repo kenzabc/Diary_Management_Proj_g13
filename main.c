@@ -19,14 +19,16 @@ int main() {
 
     do {
         printf("\nDIARY MANAGEMENT APPLICATION MENU\n");
+        printf("==================================\n");
         printf("1. Search for a contact\n");
         printf("2. View a contact's appointments\n");
         printf("3. Create a contact\n");
         printf("4. Create an appointment for a contact\n");
         printf("5. Delete an appointment\n");
-        printf("6. Save the file of all appointments\n");
-        printf("7. Load an appointment file\n");
+        printf("6. Save all appointments to file\n");
+        printf("7. Load appointments from file\n");
         printf("8. Exit\n");
+        printf("==================================\n");
 
         printf("Enter your option: ");
         scanf("%d", &option);
@@ -167,57 +169,13 @@ int main() {
                 break;
 
             case 7:
-            {
-                int choice;
-                printf("Choose an option:\n");
-                printf("1. Display all appointments for a specific contact\n");
-                printf("2. Display all appointments for all contacts\n");
-                printf("Enter your choice: ");
-                scanf("%d", &choice);
-
-                switch (choice) {
-                    case 1:
-                    {
-                        char firstName[50], lastName[50];
-                        printf("Enter the first name: ");
-                        scanf("%s", firstName);
-
-                        printf("Enter the last name: ");
-                        scanf("%s", lastName);
-
-                        LowerCase(firstName);
-                        LowerCase(lastName);
-
-                        char contactName[100];
-                        snprintf(contactName, sizeof(contactName), "%s_%s", lastName, firstName);
-
-                        contact *displayContact = setContactSelected(myList, contactName);
-                        if (displayContact != NULL) {
-                            displayAppointments(displayContact);
-                        } else {
-                            printf("Contact not found\n");
-                        }
-                    }
-                        break;
-
-                    case 2:
-                        displayAppointmentsForAllContacts(myList);
-                        break;
-
-                    default:
-                        printf("Invalid option. Please enter a valid option.\n");
-                }
-            }
-                break;
-
-            case 8:
                 printf("Exiting the program.\n");
                 break;
 
             default:
                 printf("Invalid option. Please enter a valid option.\n");
         }
-    } while (option != 8);
+    } while (option != 7);
 
     return 0;
 }

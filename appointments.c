@@ -146,7 +146,7 @@ void deleteAppointment(struct s_contact *myContact, int appointmentIndex) {
         printf("Invalid appointment index.\n");
     }
 }
-void saveAllAppointments(t_d_listcontact *myList) {
+/*void saveAllAppointments(t_d_listcontact *myList) {
     for (int i = 0; i < myList->maxLevels; i++) {
         contact *tempContact = myList->heads[i];
         while (tempContact != NULL) {
@@ -174,6 +174,37 @@ void saveAllAppointments(t_d_listcontact *myList) {
         }
     }
 }
+*/
+void saveAllAppointments(t_d_listcontact *myList) {
+    for (int i = 0; i < myList->maxLevels; i++) {
+        contact *tempContact = myList->heads[i];
+        while (tempContact != NULL) {
+            char filename[100];
+            snprintf(filename, sizeof(filename), "../knownContacts/%s.txt", tempContact->name);
+            FILE *file = fopen(filename, "w");
+
+            if (file != NULL) {
+                for (int j = 0; j < tempContact->nb_appointments; j++) {
+                    fprintf(file, "%s %d/%d/%d %d %d %s\n",
+                            tempContact->name,
+                            tempContact->myAppointments[j]->DateDay,
+                            tempContact->myAppointments[j]->DateMonth,
+                            tempContact->myAppointments[j]->DateYear,
+                            tempContact->myAppointments[j]->TimeHour,
+                            tempContact->myAppointments[j]->LengthMinute,
+                            tempContact->myAppointments[j]->Purpose);
+                }
+                fclose(file);
+                printf("Appointments saved for %s.\n", tempContact->name);
+            } else {
+                printf("Could not open or create the file %s\n", filename);
+            }
+
+            tempContact = tempContact->next[i];
+        }
+    }
+}
+
 /*
 void loadAppointmentsFromFile(t_d_listcontact *myList, const char *contactName) {
     char filepath[100];
