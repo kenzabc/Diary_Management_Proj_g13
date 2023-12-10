@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include "contact.h"
 #include "string.h"
-
+// Function to insert an appointment at the beginning of a file
 void insertAppointmentAtBeginning(appointment *myAppointment, char *owner) {
     char filename[100];
     sprintf(filename, "../knownContacts/%s.txt", owner);
@@ -42,7 +42,7 @@ void insertAppointmentAtBeginning(appointment *myAppointment, char *owner) {
     }
 }
 
-
+// Function to create an appointment
 appointment *createAppointment(int day, int month, int year, int hour, int lengthMinute, char *purpose, char *owner){
     appointment *myAppointment = (appointment*)malloc(sizeof(appointment));
     myAppointment->DateDay = day;
@@ -55,35 +55,19 @@ appointment *createAppointment(int day, int month, int year, int hour, int lengt
     insertAppointmentAtBeginning(myAppointment, owner);
     return myAppointment;
 }
-/*
-void addAppointmentToContact(struct s_contact *myContact, appointment *newAppointment) {
-    myContact->nb_appointments++;
-    myContact->myAppointments = (appointment**)realloc(myContact->myAppointments, myContact->nb_appointments * sizeof(appointment*));
-    myContact->myAppointments[myContact->nb_appointments - 1] = newAppointment;
-}
-void displayAppointments(struct s_contact *myContact) {
-    printf("Appointments of %s:\n", myContact->name);
-    if (myContact->nb_appointments >= 1) {
-        for (int i = 0; i < myContact->nb_appointments; i++) {
-            displayAppointment(&(myContact->myAppointments[i]));  // Pass the address
-        }
-    } else {
-        printf("None\n");
-    }
-}
-*/
+// Function to add an appointment to a contact
 void addAppointmentToContact(struct s_contact *myContact, appointment *newAppointment) {
     myContact->nb_appointments++;
     myContact->myAppointments = realloc(myContact->myAppointments, myContact->nb_appointments * sizeof(appointment*));
     myContact->myAppointments[myContact->nb_appointments - 1] = newAppointment;
 }
 
-
+// Function to display an appointment
 void displayAppointment(appointment *myAppointment){
     printf("-> %d/%d/%d - %dh for %d min: %s\n", myAppointment->DateDay, myAppointment->DateMonth, myAppointment->DateYear, myAppointment->TimeHour, myAppointment->LengthMinute, myAppointment->Purpose);
 }
 
-
+// Function to display appointments for a contact
 void displayAppointments(struct s_contact *myContact){
     printf("Appointments of %s:\n", myContact->name);
     if (myContact->nb_appointments >= 1){
@@ -94,6 +78,7 @@ void displayAppointments(struct s_contact *myContact){
         printf("None\n");
     }
 }
+// Function to display appointments for all contacts
 void displayAppointmentsForAllContacts(t_d_listcontact *myList) {
     for (int i = 0; i < myList->maxLevels; i++) {
         contact *tempContact = myList->heads[i];
@@ -105,7 +90,7 @@ void displayAppointmentsForAllContacts(t_d_listcontact *myList) {
 }
 
 
-
+// Function to display appointments from a file UNUSED in the program
 void displayFileAppointments(char* fullname){
     char filename[100];
     sprintf(filename, "../data/%s.txt", fullname);
@@ -125,7 +110,7 @@ void displayFileAppointments(char* fullname){
         printf("You have no appointments saved.\n");
     }
 }
-// UNTESTED
+// Function to delete an appointment from a contact
 void deleteAppointment(struct s_contact *myContact, int appointmentIndex) {
     if (appointmentIndex >= 0 && appointmentIndex < myContact->nb_appointments) {
         free(myContact->myAppointments[appointmentIndex]);
@@ -146,35 +131,8 @@ void deleteAppointment(struct s_contact *myContact, int appointmentIndex) {
         printf("Invalid appointment index.\n");
     }
 }
-/*void saveAllAppointments(t_d_listcontact *myList) {
-    for (int i = 0; i < myList->maxLevels; i++) {
-        contact *tempContact = myList->heads[i];
-        while (tempContact != NULL) {
-            char filename[100];
-            sprintf(filename, "../knownContacts/%s.txt", tempContact->name);
-            FILE *file = fopen(filename, "w");
 
-            if (file != NULL) {
-                for (int j = 0; j < tempContact->nb_appointments; j++) {
-                    fprintf(file, "%s %d/%d/%d %d %d %s\n",
-                            tempContact->name,
-                            tempContact->myAppointments[j]->DateDay,
-                            tempContact->myAppointments[j]->DateMonth,
-                            tempContact->myAppointments[j]->DateYear,
-                            tempContact->myAppointments[j]->TimeHour,
-                            tempContact->myAppointments[j]->LengthMinute,
-                            tempContact->myAppointments[j]->Purpose);
-                }
-                fclose(file);
-            } else {
-                printf("Could not open or create the file %s\n", filename);
-            }
-
-            tempContact = tempContact->next[i];
-        }
-    }
-}
-*/
+// Function to save appointments for all contacts
 void saveAllAppointments(t_d_listcontact *myList) {
     for (int i = 0; i < myList->maxLevels; i++) {
         contact *tempContact = myList->heads[i];
@@ -205,41 +163,7 @@ void saveAllAppointments(t_d_listcontact *myList) {
     }
 }
 
-/*
-void loadAppointmentsFromFile(t_d_listcontact *myList, const char *contactName) {
-    char filepath[100];
-    snprintf(filepath, sizeof(filepath), "../knownContacts/%s.txt", contactName);
-
-    FILE *file = fopen(filepath, "r");
-    if (file != NULL) {
-        char line[500];
-        while (fgets(line, sizeof(line), file) != NULL) {
-            char owner[50];
-            int day, month, year, hour, length;
-            char purpose[100];
-
-            sscanf(line, "%s %d/%d/%d %d %d %[^\n]",
-                   owner, &day, &month, &year, &hour, &length, purpose);
-
-            LowerCase(owner);
-
-            char fullName[100];
-            snprintf(fullName, sizeof(fullName), "%s", owner);
-
-            contact *myContact = setContactSelected(myList, fullName);
-
-            if (myContact != NULL) {
-                appointment *newAppointment = createAppointment(day, month, year, hour, length, purpose, fullName);
-                addAppointmentToContact(myContact, newAppointment);
-            }
-        }
-
-        fclose(file);
-        printf("Appointments loaded successfully.\n");
-    } else {
-        printf("Could not open the file: %s\n", filepath);
-    }
-}*/
+// Function to load appointments from a file UNUSED in the program
 void loadAppointmentsFromFile(t_d_listcontact *myList, const char *contactName) {
     char filepath[100];
     snprintf(filepath, sizeof(filepath), "../knownContacts/%s.txt", contactName);
@@ -278,7 +202,7 @@ void loadAppointmentsFromFile(t_d_listcontact *myList, const char *contactName) 
     }
 }
 
-// Function to load appointments for all contacts
+// Function to load appointments for all contacts UNUSED in the program
 void loadAppointmentsForAllContacts(t_d_listcontact *myList) {
     for (int i = 0; i < myList->maxLevels; i++) {
         contact *tempContact = myList->heads[i];

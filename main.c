@@ -132,6 +132,7 @@ int main() {
 
                     appointment *newAppointment = createAppointment(day, month, year, hour, length, purpose, appointmentFullName);
                     addAppointmentToContact(appointmentContact, newAppointment);
+                    insertAppointmentAtBeginning(newAppointment, appointmentFullName);
                 } else {
                     printf("Contact not found\n");
                 }

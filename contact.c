@@ -12,6 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//FUNCTION THAT CONVERTS A STRING TO LOWERCASE
 void LowerCase(char *string){
     if (string == NULL) {
         return;
@@ -21,7 +22,7 @@ void LowerCase(char *string){
         string[i] = tolower(string[i]);
     }
 }
-
+// INSERTS A STRING IN A SORTED FILE
 void insertStringInSortedFile(const char *myString) {
     FILE *file = fopen("../contacts.txt", "r+");
 
@@ -58,6 +59,7 @@ void insertStringInSortedFile(const char *myString) {
         printf("We could not open the file contacts.txt\n");
     }
 }
+// CREATES A CONTACT
 contact *createContact(char *firstName, char *lastName, int nbLevels){
     LowerCase(firstName);
     LowerCase(lastName);
@@ -83,7 +85,7 @@ contact *createContact(char *firstName, char *lastName, int nbLevels){
 
     return newContact;
 }
-
+// CREATES A CONTACT
 contact *initializeContact(char *fullname, int nbLevels){
     contact *Contact = (contact*)malloc(sizeof (contact));
     Contact->name = (char*)malloc(strlen(fullname) + 1);
@@ -95,7 +97,7 @@ contact *initializeContact(char *fullname, int nbLevels){
 
     return Contact;
 }
-
+// CREATES A CONTACT LIST WITH A MAXIMUM OF LEVELS
 t_d_listcontact *createListContact(int maxLevels){
     t_d_listcontact *myList = (t_d_listcontact*)malloc(sizeof(t_d_listcontact));
     myList->maxLevels = maxLevels;
@@ -107,6 +109,7 @@ t_d_listcontact *createListContact(int maxLevels){
     }
     return myList;
 }
+// INSERTS A CONTACT IN THE LIST
 void insertContact(t_d_listcontact *myList, contact *myContact){
     for (int i=0; i<myContact->nb_levels; i++){
         contact *tempContact = myList->heads[i];
@@ -114,6 +117,7 @@ void insertContact(t_d_listcontact *myList, contact *myContact){
         myContact->next[i] = tempContact;
     }
 }
+// DISPLAYS A CONTACT IN CLASS FORMAT UNUSED IN THE PROGRAM
 void displayLevelContact(t_d_listcontact *myList, int level){
     if (myList->heads[level]!=NULL){
         contact *tempContact = myList->heads[level];
@@ -127,7 +131,7 @@ void displayLevelContact(t_d_listcontact *myList, int level){
         printf("No contacts");
     }
 }
-
+// DISPLAYS A CONTACT IN CLASS FORMAT UNUSED IN THE PROGRAM
 void displayAllLevelsContact(t_d_listcontact *myList){
     if (myList->heads[0]!=NULL) {
         for (int i = 0; i < myList->maxLevels; i++) {
@@ -137,7 +141,7 @@ void displayAllLevelsContact(t_d_listcontact *myList){
         printf("No contacts");
     }
 }
-
+// INITIALIZES ALL CONTACTS FROM THE FILE
 void initializeContacts(t_d_listcontact *myList){
     FILE *file = fopen("../contacts.txt", "r+");
 
@@ -154,7 +158,7 @@ void initializeContacts(t_d_listcontact *myList){
         printf("There is no contacts.");
     }
 }
-
+// DISPLAYS ALL CONTACTS FROM THE FILE
 void displayContacts(t_d_listcontact *myList){
     contact *tempContact = myList->heads[0];
     if (tempContact != NULL){
@@ -166,6 +170,7 @@ void displayContacts(t_d_listcontact *myList){
         printf("No contacts in the list\n");
     }
 }
+// SELECTS A CONTACT FROM THE LIST USING THE FULLNAME
 contact *setContactSelected(t_d_listcontact *myList, char* fullname){
     contact *tempContact = myList->heads[0];
     if (tempContact != NULL){
